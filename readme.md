@@ -52,46 +52,46 @@ echo $script;
 ```
 
 ### Minify JS file
-<pre>
+```php
 $this->load->driver('minify');
 $file = 'test/js/test1.js';
 echo $this->minify->js->min($file);
-</pre>
+```
 
 ### Minify CSS file
-<pre>
+```php
 $this->load->driver('minify');
 $file = 'test/css/test1.css';
 echo $this->minify->css->min($file);
-</pre>
+```
 
 ### Minify String
-<pre>
+```php
 $this->load->driver('minify');
 $content = 'body{ padding:0; margin: 0}';
 echo $this->minify->css->min($content);
-</pre>
+```
 
 ### Minify and combine an array of files. Useful if you need files to be in a certain order.
-<pre>
+```php
 $this->load->driver('minify');
 $files = array('test/css/test2.css', 'test/css/test1.css');
 echo $this->minify->combine_files($files, [optionalParams]);
-</pre>
+```
 
 ### Minify and save a physical file
-<pre>
+```php
 $this->load->driver('minify');
 $file = 'test/css/test1.css';
 $contents = $this->minify->css->min($file);
 $this->minify->save_file($contents, 'test/css/all.css');
-</pre>
+```
 
 ### Minify an entire directory. The second param is an array of ignored files.
-<pre>
+```php
 $this->load->driver('minify');
 echo $this->minify->combine_directory('test/css/, array('all.css'), [optionalParams]);
-</pre>
+```
 
 Optional Params
 <pre>
