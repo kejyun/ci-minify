@@ -1,60 +1,97 @@
-# CodeIgniter Minify
-
-Please note **this project is no longer maintained**. 
-
-The goal of this project is to provide a simple way to minify and combine js and css files inside a CodeIgniter application. Currently other systems
-exists but I wanted the compression to be part of my build process. So on deployments I compress and minify all the js and css. Then push off to s3
-but this could also be useful to write them to a single file.
+# CodeIgniter Minify v1.0.1
 
 ## Installation
 
-Upload the Minify folder to your libraries folder. This is built using CI2 packages and you must be using CI2.
+> This is built using CI2 packages and you must be using CI2.
+
+1. Upload the `Minify folder` to your `libraries` folder.
+2. Upload the `config/minify.php` to your `config` folder.
+3. Setting `config/minify.php`
+
+```php
+// output path where the compiled files will be stored
+$config['assets_dir'] = 'assets/';  
+
+// where to look for css files 
+$config['css_dir'] = 'assets/css';
+
+// where to look for js files 
+$config['js_dir'] = 'assets/js';
+?>
+```
+
 
 ## Usage
 
 Below is an overview of different usages:
 
-Minify JS file
-<pre>
+### Minify and deploy JS file
+
+```php
+$this->load->driver('minify');
+
+$files = array('a.js' , 'b.js');
+$this->minify->addfile($files);
+$script = $this->minify->deploy('app.js');
+
+// <script type="text/javascript" src="http://example.com/assets/app.js?t=1407564151"></script>
+echo $script;
+```
+
+### Minify and deploy CSS file
+
+```php
+$this->load->driver('minify');
+
+$files = array('a.css' , 'b.css');
+$this->minify->addfile($files);
+$script = $this->minify->deploy('app.css');
+
+// <link href="http://example.com/assets/app.css?t=1407564180" rel="stylesheet" type="text/css">
+echo $script;
+```
+
+### Minify JS file
+```php
 $this->load->driver('minify');
 $file = 'test/js/test1.js';
 echo $this->minify->js->min($file);
-</pre>
+```
 
-Minify CSS file
-<pre>
+### Minify CSS file
+```php
 $this->load->driver('minify');
 $file = 'test/css/test1.css';
 echo $this->minify->css->min($file);
-</pre>
+```
 
-Minify String
-<pre>
+### Minify String
+```php
 $this->load->driver('minify');
 $content = 'body{ padding:0; margin: 0}';
 echo $this->minify->css->min($content);
-</pre>
+```
 
-Minify and combine an array of files. Useful if you need files to be in a certain order.
-<pre>
+### Minify and combine an array of files. Useful if you need files to be in a certain order.
+```php
 $this->load->driver('minify');
 $files = array('test/css/test2.css', 'test/css/test1.css');
 echo $this->minify->combine_files($files, [optionalParams]);
-</pre>
+```
 
-Minify and save a physical file
-<pre>
+### Minify and save a physical file
+```php
 $this->load->driver('minify');
 $file = 'test/css/test1.css';
 $contents = $this->minify->css->min($file);
 $this->minify->save_file($contents, 'test/css/all.css');
-</pre>
+```
 
-Minify an entire directory. The second param is an array of ignored files.
-<pre>
+### Minify an entire directory. The second param is an array of ignored files.
+```php
 $this->load->driver('minify');
 echo $this->minify->combine_directory('test/css/, array('all.css'), [optionalParams]);
-</pre>
+```
 
 Optional Params
 <pre>
