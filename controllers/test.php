@@ -30,42 +30,74 @@
 /**
  * Unit Test Controller
  *
- * @subpackage	Controllers
+ * @subpackage  Controllers
  */
 class Test extends CI_Controller {
 
-	function __construct()
-	{
-		parent::__construct();
-		$this->load->library('unit_test');
-		$this->load->driver('minify');
-	}
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->library('unit_test');
+        $this->load->driver('minify');
+    }
 
-	function index()
-	{
-		$class_methods = get_class_methods($this);
-		foreach ($class_methods as $method_name)
-		{
-			if (substr($method_name, 0, 5) == '_test')
-			{
-				self::$method_name();
-			}
-		}
+    function index()
+    {
+        $class_methods = get_class_methods($this);
+        foreach ($class_methods as $method_name)
+        {
+            if (substr($method_name, 0, 5) == '_test')
+            {
+                self::$method_name();
+            }
+        }
 
-		echo $this->unit->report();
-	}
+        echo $this->unit->report();
+    }
 
-	private function _test_css()
-	{
-		$file = 'test/css/calendar.css';
-		$this->unit->run($this->minify->css->min($file), 'is_string', 'test min css');
-	}
+    private function _test_css()
+    {
+        $file = 'test/css/calendar.css';
+        $this->unit->run($this->minify->css->min($file), 'is_string', 'test min css');
+    }
 
-	private function _test_js_min()
-	{
-		$file = 'test/js/colorbox.js';
-		$this->unit->run($this->minify->js->min($file), 'is_string', 'test min js');
-	}
+    private function _test_js_min()
+    {
+        $file = 'test/js/colorbox.js';
+        $this->unit->run($this->minify->js->min($file), 'is_string', 'test min js');
+    }
+
+
+    public function test_js()
+    {
+        $this->load->driver('minify');
+
+        // Add minify file
+        $files = array('a.js' , 'b.js');
+        $this->minify->addfile($files);
+
+        // Generate minify file html script
+        $script = $this->minify->deploy('app.js');
+
+        // <script type="text/javascript" src="http://example.com/assets/app.js?t=1407564151"></script>
+        echo $script;
+    }
+    
+
+    public function test_css()
+    {
+        $this->load->driver('minify');
+
+        // Add minify file
+        $files = array('a.css' , 'b.css');
+        $this->minify->addfile($files);
+
+        // Generate minify file html script
+        $script = $this->minify->deploy('app.css');
+
+        // <link href="http://example.com/assets/app.css?t=1407564180" rel="stylesheet" type="text/css">
+        echo $script;
+    }
 }
 
 /* End of file test.php */
